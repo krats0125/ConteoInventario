@@ -77,7 +77,7 @@ namespace ConteoDeInventario
                     {
                         if (oConteo.Rol == 3 && !ValidarBodegaSeleccionada()) return;
                         FrmEligirProductos elegir = new FrmEligirProductos(oConteo, this);
-                        elegir.ShowDialog();
+                        elegir.Show();
                     }
                     else 
                     {

@@ -25,9 +25,9 @@ namespace ConteoDeInventario
             this.ppal = ppal;
         }
 
-        private void FrmEligirProductos_Load(object sender, EventArgs e)
+        private async void FrmEligirProductos_Load(object sender, EventArgs e)
         {
-            mostrarlista();
+           await mostrarlista();
         }
 
         public async Task mostrarlista()

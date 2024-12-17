@@ -30,7 +30,7 @@ namespace ListaAdministracion.Presentacion
 
         public void ListarConteo()
         {
-            string consulta = @"select Idreferencia as 'ID PRODUCTO',referencia AS PRODUCTO,InventarioMomento AS 'INVENTARIO ACTUAL',InventarioConteo 'INVENTARIO CONTADO',Diferencia AS DIFERENCIA,Contador AS TRABAJADOR ,InventarioBodega 'INVENTARIO EN BODEGA',IdBodega 'BODEGA',Observacion AS OBSERVACIONES,verifico 'VERIFICACIÓN',ModificoInventarioReal 'MODIFICACION A INVENTARIO REAL',observacionesfinales 'OBSERVACIONES FINALES',FechaConteo 'FECHA DE CONTEO'
+            string consulta = @"select Idreferencia as 'ID PRODUCTO',referencia AS PRODUCTO,InventarioMomento AS 'INVENTARIO ACTUAL',InventarioConteo 'INVENTARIO CONTADO',Diferencia AS DIFERENCIA,Contador AS TRABAJADOR ,InventarioBodega 'INVENTARIO EN BODEGA',IdBodega 'BODEGA',verifico 'VERIFICACIÓN',Observacion AS OBSERVACIONES,ModificoInventarioReal 'MODIFICACION A INVENTARIO REAL',observacionesfinales 'OBSERVACIONES FINALES',FechaConteo 'FECHA DE CONTEO'
 	                           from VerificacionInventario ";
             DataTable lista = new SentenciasSqlServer().TraerDatos(consulta, conexion.ConexionRibisoft());
             dgvListaConteo.DataSource = lista;
@@ -167,6 +167,31 @@ namespace ListaAdministracion.Presentacion
             //{
             //    dgvListaConteo.CommitEdit(DataGridViewDataErrorContexts.Commit);
             //}
+        }
+
+        private void dtpFecha_ValueChanged(object sender, EventArgs e)
+        {
+            string sql = @"select Idreferencia as 'ID PRODUCTO',referencia AS PRODUCTO,InventarioMomento AS 'INVENTARIO ACTUAL',InventarioConteo 'INVENTARIO CONTADO',Diferencia AS DIFERENCIA,Contador AS TRABAJADOR ,InventarioBodega 'INVENTARIO EN BODEGA',IdBodega 'BODEGA',Observacion AS OBSERVACIONES,verifico 'VERIFICACIÓN',ModificoInventarioReal 'MODIFICACION A INVENTARIO REAL',observacionesfinales 'OBSERVACIONES FINALES',FechaConteo 'FECHA DE CONTEO'
+	                      from VerificacionInventario where convert(date,FechaConteo)=CONVERT(date,@fecha)";
+            try
+            {
+                using (SqlConnection cn=new SqlConnection(conexion.ConexionRibisoft()))
+                {
+                    using (SqlCommand cmd=new SqlCommand(sql,cn))
+                    {
+                        cmd.Parameters.AddWithValue("@fecha", dtpFecha.Value.Date);
+                        cn.Open();
+                        SqlDataAdapter adapter = new SqlDataAdapter(cmd);
+                        DataTable lista= new DataTable();
+                        adapter.Fill(lista);
+                        dgvListaConteo.DataSource = lista;
+
+                    }
+
+
+                }
+            }
+            catch (Exception ex) { }
         }
     }
 }
